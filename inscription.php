@@ -10,7 +10,7 @@ if(isset($_POST['submit']) && $_SERVER["REQUEST_METHOD"] === 'POST'){
   if(empty($_POST['firstName'])){$errorFirstName = "<small class='text-danger'>Merci de renseigner votre prénom</small>"; $globalError = true;}
   if(empty($_POST['lastName'])){$errorLastName = "<small class='text-danger'>Merci de renseigner votre nom</small>"; $globalError = true;}
   if(empty($_POST['address'])){$errorAddress = "<small class='text-danger'>Merci de renseigner votre adresse</small>"; $globalError = true;}
-  if(empty($_POST['city'])){$errorCity = "<small class='text-danger'>Merci de renseigner votre ville</small>"; $globalError++;}
+  if(empty($_POST['city'])){$errorCity = "<small class='text-danger'>Merci de renseigner votre ville</small>"; $globalError = true;}
   if(empty($_POST['zipcode']) || !is_numeric($_POST['zipcode'])){$errorZipcode = "<small class='text-danger'>Merci de renseigner votre code postal</small>"; $globalError = true;}
 
   // 2- controler la disponibilité de l'email
