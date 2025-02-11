@@ -5,11 +5,13 @@ require_once('include/init.php');
 echo '<pre>'; print_r($_POST); echo '</pre>';
 
 if(isset($_POST['submit'])){
-  if(empty($_POST['firstName'])){$errorFirstName = "Merci de renseigner votre prénom";}
-  if(empty($_POST['lastName'])){$errorLastName = "Merci de renseigner votre nom";}
-  if(empty($_POST['address'])){$errorAddress = "Merci de renseigner votre adresse";}
-  if(empty($_POST['city'])){$errorCity = "Merci de renseigner votre ville";}
-  if(empty($_POST['zipcode'])){$errorZipcode = "Merci de renseigner votre code postal";}
+  $globalError = false;
+
+  if(empty($_POST['firstName'])){$errorFirstName = "Merci de renseigner votre prénom"; $globalError = true;}
+  if(empty($_POST['lastName'])){$errorLastName = "Merci de renseigner votre nom"; $globalError = true;}
+  if(empty($_POST['address'])){$errorAddress = "Merci de renseigner votre adresse"; $globalError = true;}
+  if(empty($_POST['city'])){$errorCity = "Merci de renseigner votre ville"; $globalError++;}
+  if(empty($_POST['zipcode'])){$errorZipcode = "Merci de renseigner votre code postal"; $globalError = true;}
 
   // 2- controler la disponibilité de l'email
   $data = $dbConnect->prepare("SELECT COUNT(email) as nbMail FROM user WHERE email = :email");
@@ -17,23 +19,26 @@ if(isset($_POST['submit'])){
   $data->execute();
   $dispoMail = $data->fetch(PDO::FETCH_ASSOC);
 
-  if($dispoMail['nbMail']){$dispoEmail = false;}else{$dispoEmail = true;}
+  if($dispoMail['nbMail']){$dispoEmail = false; $globalError = true;}else{$dispoEmail = true;}
 
   // 3- afficher un message d'erreur si le champ email est laissé vide
   if(empty($_POST['email'])){
     $erreurEmail = "Merci de renseigner une adresse email valide";
+    $globalError = true;
   }else
   // 4- controler la validité de l'email
   if(filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
     $successEmail = true;
-  }else{$erreurEmail = "l'email n'est pas valide";}
+  }else{$erreurEmail = "l'email n'est pas valide"; $globalError = true;}
 
   // 5- afficher un message d'erreur si le mdp est laissé vide
   if(empty($_POST['password'])){
     $erreurPsw = 'Merci de rentrer un mot de passe';
+    $globalError = true;
   }
   if(empty($_POST['passwordConfirm'])){
     $erreurPswRep = "Merci de confirmer votre mot de passe";
+    $globalError = true;
   }
 
   // force du mot de passe (au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial)
@@ -41,10 +46,23 @@ if(isset($_POST['submit'])){
   $pswStrength = preg_match($regPsw, $_POST["password"]);
 
   // 6- controler que les champs mdp correspondent bien
-  if($_POST['password'] === $_POST['passwordConfirm']){
+  if($_POST['password'] === $_POST['passwordConfirm'] && $pswStrength){
     $validPsw = true;
   }else{
     $validPsw = false;
+    $globalError = true;
+  }
+
+  if($globalError == false){
+    $data = $dbConnect->prepare("INSERT INTO user(password, firstName, lastName, email, city, zipcode, address) VALUES(:password, :firstName, :lastName, :email, :city, :zipcode, :address)");
+    $data->bindValue(':password', $_POST['password'], PDO::PARAM_STR);
+    $data->bindValue(':firstName', $_POST['firstName'], PDO::PARAM_STR);
+    $data->bindValue(':lastName', $_POST['lastName'], PDO::PARAM_STR);
+    $data->bindValue(':email', $_POST['email'], PDO::PARAM_STR);
+    $data->bindValue(':city', $_POST['city'], PDO::PARAM_STR);
+    $data->bindValue(':zipcode', $_POST['zipcode'], PDO::PARAM_STR);
+    $data->bindValue(':address', $_POST['address'], PDO::PARAM_STR);
+    $data->execute();
   }
 }
 
