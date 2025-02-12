@@ -5,7 +5,6 @@ require_once('include/init.php');
 echo '<pre>'; print_r($_POST); echo '</pre>';
 
 if(isset($_POST['submit']) && $_SERVER["REQUEST_METHOD"] === 'POST'){
-  $globalError = false;
 
   if(empty($_POST['firstName'])){$errorFirstName = "<small class='text-danger'>Merci de renseigner votre prénom</small>"; $globalError = true;}
   if(empty($_POST['lastName'])){$errorLastName = "<small class='text-danger'>Merci de renseigner votre nom</small>"; $globalError = true;}
@@ -56,6 +55,7 @@ if(isset($_POST['submit']) && $_SERVER["REQUEST_METHOD"] === 'POST'){
   $regPsw = "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/";
   if(!preg_match($regPsw, $_POST["password"])){
     $errorPswStrength = "<small class='text-danger'>Le mot de passe doit comporter au moins 8 caractères, une minuscule, une majuscule, un chiffre et un caractère spécial</small>";
+    $globalError = true;
   }
 
   // 6- controler que les champs mdp correspondent bien
@@ -64,9 +64,9 @@ if(isset($_POST['submit']) && $_SERVER["REQUEST_METHOD"] === 'POST'){
     $globalError = true;
   }
 
-  if($globalError == false){
-    $data = $dbConnect->prepare("INSERT INTO user(password, firstName, lastName, email, city, zipcode, address) VALUES(:password, :firstName, :lastName, :email, :city, :zipcode, :address)");
-    $data->bindValue(':password', $_POST['password'], PDO::PARAM_STR);
+  if(!isset($globalError)){
+    $data = $dbConnect->prepare("INSERT INTO user (password, firstName, lastName, email, city, zipcode, address) VALUES (:password, :firstName, :lastName, :email, :city, :zipcode, :address)");
+    $data->bindValue(':password', password_hash($_POST['password'], PASSWORD_DEFAULT), PDO::PARAM_STR);
     $data->bindValue(':firstName', $_POST['firstName'], PDO::PARAM_STR);
     $data->bindValue(':lastName', $_POST['lastName'], PDO::PARAM_STR);
     $data->bindValue(':email', $_POST['email'], PDO::PARAM_STR);
