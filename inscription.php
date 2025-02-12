@@ -2,7 +2,7 @@
 require_once('include/init.php');
 
 // 1- controler la réception des données du formulaire
-echo '<pre>'; print_r($_POST); echo '</pre>';
+// echo '<pre>'; print_r($_POST); echo '</pre>';
 
 if(isset($_POST['submit']) && $_SERVER["REQUEST_METHOD"] === 'POST'){
 
@@ -66,14 +66,18 @@ if(isset($_POST['submit']) && $_SERVER["REQUEST_METHOD"] === 'POST'){
 
   if(!isset($globalError)){
     $data = $dbConnect->prepare("INSERT INTO user (password, firstName, lastName, email, city, zipcode, address) VALUES (:password, :firstName, :lastName, :email, :city, :zipcode, :address)");
-    $data->bindValue(':password', password_hash($_POST['password'], PASSWORD_DEFAULT), PDO::PARAM_STR);
+    $data->bindValue(':password', password_hash($_POST['password'], PASSWORD_DEFAULT), PDO::PARAM_STR); // cryptage du mdp via password_hash()
     $data->bindValue(':firstName', $_POST['firstName'], PDO::PARAM_STR);
     $data->bindValue(':lastName', $_POST['lastName'], PDO::PARAM_STR);
     $data->bindValue(':email', $_POST['email'], PDO::PARAM_STR);
     $data->bindValue(':city', $_POST['city'], PDO::PARAM_STR);
-    $data->bindValue(':zipcode', $_POST['zipcode'], PDO::PARAM_STR);
+    $data->bindValue(':zipcode', $_POST['zipcode'], PDO::PARAM_INT);
     $data->bindValue(':address', $_POST['address'], PDO::PARAM_STR);
     $data->execute();
+
+    // On stock, dans le fichier de session de l'utilisateur, le message de validation qui sera ensuite supprimé (message flash)
+    $_SESSION['msgRegisterValid'] = '<div class="bg-success p-3 text-white text-center mb-3">Votre compte a été créé avec succès</div>';
+    header('location: connexion.php');
   }
 }
 

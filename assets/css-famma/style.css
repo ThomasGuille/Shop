@@ -1098,6 +1098,10 @@ form input[type="submit"]:focus {
     color: #fff;
 }
 
+.background-danger{
+  background-color: rgb(255, 43, 15);
+}
+
 /** cpy **/
 
 .cpy_ {

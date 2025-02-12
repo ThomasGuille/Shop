@@ -1,5 +1,9 @@
 <?php 
-  require_once('include/header.php');
+require_once('include/init.php');
+
+echo '<pre>'; print_r($_SESSION); echo '</pre>';
+
+require_once('include/header.php');
 ?>
 
 
