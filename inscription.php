@@ -1,6 +1,10 @@
 <?php 
 require_once('include/init.php');
 
+if(userConnected()){
+  header('location: index.php');
+}
+
 // 1- controler la réception des données du formulaire
 // echo '<pre>'; print_r($_POST); echo '</pre>';
 

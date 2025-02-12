@@ -1,6 +1,14 @@
 <?php 
 require_once('include/init.php');
 
+if(isset($_GET['action']) && $_GET['action'] == 'logout'){
+  unset($_SESSION['user']);
+}
+
+if(userConnected()){
+  header('location: index.php');
+}
+
 // echo '<pre>'; print_r($_POST); echo '</pre>';
 
 if(isset($_POST['submit']) && $_SERVER['REQUEST_METHOD'] === 'POST'){

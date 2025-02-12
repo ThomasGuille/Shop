@@ -1,7 +1,16 @@
 <?php
 // ------------ FONCTION UTILISATEUR AUTHENTIFIE
 // permet de savoir si l'utilisateur est authentifié ou non
-function userConnect(){
-    if(!isset($_SESSION['user'])) return false;
-    return true;
+function userConnected(){
+    if(isset($_SESSION['user'])) return true;
+    else
+    return false;
+}
+
+// ------------ FONCTION ADMIN AUTHENTIFIE
+// permet de savoir si un administrateur est authentifié ou non
+function adminConnected(){
+    if(userConnected() && $_SESSION['user']['roles'] == 'admin') return true;
+    else
+    return false;
 }
