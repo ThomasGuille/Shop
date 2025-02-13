@@ -13,7 +13,7 @@ session_start();
 // -------- CHEMIN
 // echo '<pre>'; print_r($_SERVER); echo '</pre>';
 
-define('RACINE_SITE', $_SERVER['DOCUMENT_ROOT'] . '/');
+define('RACINE_SITE', $_SERVER['DOCUMENT_ROOT'] . '/PHP/Boutique/Shop/');
 // echo '<pre>'; print_r(RACINE_SITE); echo '</pre>';
 // Cette constante retourne le chemin physique du dossier htdocs sur le serveur
 // Lors de l'enregistrement d'image/photo, nous avons besoin du chemin complet du dossier
