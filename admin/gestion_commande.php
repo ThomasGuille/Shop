@@ -7,8 +7,8 @@ if(!adminConnected()){
 
 $data = $dbConnect->query("SELECT user.firstName, user.lastName, order.rising, order.date, order.state, order_details.quantity, product.reference, product.title, product.picture, product.price 
   FROM `order` JOIN order_details ON order_details.order_id = order.id_order
-   JOIN product ON order_details.product_id = product.id_product
-   JOIN user ON order.user_id = user.id_user"
+  JOIN product ON order_details.product_id = product.id_product
+  JOIN user ON order.user_id = user.id_user"
 );
 
 $dataCommande = $data->fetchAll(PDO::FETCH_ASSOC);
@@ -76,61 +76,11 @@ require_once('include/header.php');
                   </label>
                 </th>
                 <th></th>
-                <th>Name</th>
-                <th>Company</th>
-                <th>City</th>
-                <th>Progress</th>
-                <th>Created</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="is-checkbox-cell">
-                  <label class="b-checkbox checkbox">
-                    <input type="checkbox" value="false" />
-                    <span class="check"></span>
-                  </label>
-                </td>
-                <td class="is-image-cell">
-                  <div class="image">
-                    <img
-                      src="https://avatars.dicebear.com/v2/initials/rebecca-bauch.svg"
-                      class="is-rounded" />
-                  </div>
-                </td>
-                <td data-label="Name">Rebecca Bauch</td>
-                <td data-label="Company">Daugherty-Daniel</td>
-                <td data-label="City">South Cory</td>
-                <td data-label="Progress" class="is-progress-cell">
-                  <progress
-                    max="100"
-                    class="progress is-small is-primary"
-                    value="79">
-                    79
-                  </progress>
-                </td>
-                <td data-label="Created">
-                  <small
-                    class="has-text-grey is-abbr-like"
-                    title="Oct 25, 2020">Oct 25, 2020</small>
-                </td>
-                <td class="is-actions-cell">
-                  <div class="buttons is-right">
-                    <button
-                      class="button is-small is-primary"
-                      type="button">
-                      <span class="icon"><i class="mdi mdi-eye"></i></span>
-                    </button>
-                    <button
-                      class="button is-small is-danger jb-modal"
-                      data-target="sample-modal"
-                      type="button">
-                      <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
+              
             </tbody>
           </table>
         </div>
@@ -185,61 +135,11 @@ require_once('include/header.php');
                   </label>
                 </th>
                 <th></th>
-                <th>Name</th>
-                <th>Company</th>
-                <th>City</th>
-                <th>Progress</th>
-                <th>Created</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="is-checkbox-cell">
-                  <label class="b-checkbox checkbox">
-                    <input type="checkbox" value="false" />
-                    <span class="check"></span>
-                  </label>
-                </td>
-                <td class="is-image-cell">
-                  <div class="image">
-                    <img
-                      src="https://avatars.dicebear.com/v2/initials/rebecca-bauch.svg"
-                      class="is-rounded" />
-                  </div>
-                </td>
-                <td data-label="Name">Rebecca Bauch</td>
-                <td data-label="Company">Daugherty-Daniel</td>
-                <td data-label="City">South Cory</td>
-                <td data-label="Progress" class="is-progress-cell">
-                  <progress
-                    max="100"
-                    class="progress is-small is-primary"
-                    value="79">
-                    79
-                  </progress>
-                </td>
-                <td data-label="Created">
-                  <small
-                    class="has-text-grey is-abbr-like"
-                    title="Oct 25, 2020">Oct 25, 2020</small>
-                </td>
-                <td class="is-actions-cell">
-                  <div class="buttons is-right">
-                    <button
-                      class="button is-small is-primary"
-                      type="button">
-                      <span class="icon"><i class="mdi mdi-eye"></i></span>
-                    </button>
-                    <button
-                      class="button is-small is-danger jb-modal"
-                      data-target="sample-modal"
-                      type="button">
-                      <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
+              
             </tbody>
           </table>
         </div>
