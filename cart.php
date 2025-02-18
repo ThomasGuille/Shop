@@ -18,15 +18,25 @@ if(isset($_POST['addCart'])){
 }
 
 if(isset($_POST['checkOut'])){
+    $error = '';
     for($i = 0; $i < count($_SESSION['cart']['id_product']); $i++){
         $data = $dbConnect->query("SELECT * FROM product WHERE id_product =" . $_SESSION['cart']['id_product'][$i]);
         $product = $data->fetch(PDO::FETCH_ASSOC);
         echo '<pre>'; print_r($product); echo '</pre>';
 
-        $error = '';
+        // Comparaison du stock restant avec la quantité demandée
         if($product['stock'] < $_SESSION['cart']['quantity'][$i]){
-            $error .= "<div class='alert alert-danger'>Stock restant du produit " . $_SESSION['cart']['title'][$i] . ": <strong>" . $product['stock'] . "</strong></div>";
-            $error .= "<div class='alert alert-danger mt-2'>Quantité commandée: <strong>" . $_SESSION['cart']['quantity'][$i] . "</strong></div>";
+            $error .= "<div class='alert alert-danger text-center'>Stock restant du produit " . $_SESSION['cart']['title'][$i] . ": <strong>" . $product['stock'] . "</strong></div>";
+            $error .= "<div class='alert alert-warning text-center'>Quantité commandée: <strong>" . $_SESSION['cart']['quantity'][$i] . "</strong></div>";
+
+            if($product['stock'] > 0){
+                // si il en reste en stock
+                $_SESSION['cart']['quantity'][$i] = $product['stock'];
+                $error .= "<div class='alert alert-success text-center'>La quantité du produit: " . $_SESSION['cart']['title'][$i] . " a été réduite car il n'y en a plus asseez en stock</div>";
+            }else{
+                // si rupture de stock
+                $error .= "<div class='alert alert-success text-center'>Le produit: " . $_SESSION['cart']['title'][$i] . " a été supprimé car il est en rupture de stock</div>";
+            }
         }
     }
 }
@@ -58,6 +68,9 @@ require_once('include/header.php');
         <div class="heading_container heading_center">
             <h2>Validez vos <span>achats</span></h2>
         </div>
+
+        <?php if(isset($error)) echo $error; ?>
+
         <div class="row">
             <table class="table text-center">
                 <thead>
