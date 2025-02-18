@@ -53,12 +53,12 @@ if(isset($_POST['submit']) && $_SERVER['REQUEST_METHOD'] === 'POST'){
       // On définit l'url de l'image qui sera stockée en BDD
       // http://localhost/PHP/Boutique/Shop/assets/images-produits/RB152-p4.png
       $pictureUrlDb = URL . "assets/images-produits/$pictureName";
-      echo $pictureUrlDb . '<br>';
+      // echo $pictureUrlDb . '<br>';
   
       // On définit le chemin physique sur les serveur où sera copiée l'image
       // C:/xampp/htdocs/PHP/Boutique/Shop/assets/images-produits/RB152-p4.png 
       $pictureFolder = RACINE_SITE . "assets/images-produits/$pictureName";
-      echo $pictureFolder;
+      // echo $pictureFolder;
   
       /*
        La fonction prédéfinie copy() permet de copier un fichier dans un dossier.
@@ -78,7 +78,6 @@ if(isset($_POST['submit']) && $_SERVER['REQUEST_METHOD'] === 'POST'){
     $_SESSION['msgValid'] = "Le produit a bien été modifié dans la base de données";
   }else{
     // Requête SQL d'insertion
-    echo 'test';
     $data = $dbConnect->prepare("INSERT INTO product (reference, category, title, description, color, size, public, picture, price, stock) VALUES (:reference, :category, :title, :description, :color, :size, :public, :picture, :price, :stock)");
     
     $_SESSION['msgValid'] = "Le produit a bien été enregistré dans la base de données";

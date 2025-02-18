@@ -50,6 +50,24 @@ function addProductCart($id_product, $title, $picture, $reference, $quantity, $p
     }
 }
 
+// FONCTION SUPPRESSION EN CAS DE RUPTURE
+function removeProductCart($id_product){
+    // on cherche à quel indice se trouve l'id du produit à supprimer
+    $positionProduct = array_search($id_product, $_SESSION['cart']['id_product']);
+    // var_dump($positionProduct);
+
+    // si il y a une correspondance, on supprime chaque élément de la session ayant pour indice celui du produit
+    if($positionProduct != false){
+        // array_splice() est une fonction prédéfinie permettant de supprimer un élément dans un array à l'indice donné (ici $positionProduct) et réattribue les indices pour ne pas en avoir de laissé vide (les éléments de l'indice 3 remontent à l'indice 2, par exemple)
+        array_splice($_SESSION['cart']['id_product'], $positionProduct, 1);
+        array_splice($_SESSION['cart']['title'], $positionProduct, 1);
+        array_splice($_SESSION['cart']['picture'], $positionProduct, 1);
+        array_splice($_SESSION['cart']['reference'], $positionProduct, 1);
+        array_splice($_SESSION['cart']['quantity'], $positionProduct, 1);
+        array_splice($_SESSION['cart']['price'], $positionProduct, 1);
+    }
+}
+
 
 // CALCUL DU MONTANT TOTAL DU PANIER
 function totalCartPrice(){
@@ -66,3 +84,4 @@ function activeNavLink($url){
         echo 'active';
     }
 }
+
