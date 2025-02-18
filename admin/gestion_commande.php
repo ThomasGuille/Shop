@@ -5,7 +5,14 @@ if(!adminConnected()){
   header('location:' . URL . 'index.php');
 }
 
-$dbConnect->query("SELECT * FROM ");
+$data = $dbConnect->query("SELECT user.firstName, user.lastName, order.rising, order.date, order.state, order_details.quantity, product.reference, product.title, product.picture, product.price 
+  FROM `order` JOIN order_details ON order_details.order_id = order.id_order
+   JOIN product ON order_details.product_id = product.id_product
+   JOIN user ON order.user_id = user.id_user"
+);
+
+$dataCommande = $data->fetchAll(PDO::FETCH_ASSOC);
+  echo '<pre>'; print_r($dataCommande); echo '</pre>';
 
 require_once('include/header.php');
 ?>
