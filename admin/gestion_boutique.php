@@ -5,10 +5,25 @@ if(!adminConnected()){
   header('location:' . URL . 'index.php');
 }
 
+// echo '<pre>'; print_r($_SESSION); echo '</pre>';
+
+$_SESSION['msg'] = false;
+
+// Requête de suppression
+if(isset($_GET['action']) && $_GET['action'] == 'delete'){
+  $dataDelete = $dbConnect->prepare("DELETE FROM product WHERE id_product = :id");
+  $dataDelete->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
+  $dataDelete->execute();
+  $_SESSION['msgValid'] = "Le produit a bien été supprimé de la base de données";
+  $_SESSION['msg'] = true;
+  header('location: gestion_boutique.php');
+}
+
 if(isset($_POST['submit']) && $_SERVER['REQUEST_METHOD'] === 'POST'){
   // echo '<pre>'; print_r($_FILES); echo '</pre>';
   // echo '<pre>'; print_r($_POST); echo '</pre>';
 
+  $pictureUrlDb = null;
   if(isset($_GET['action']) && $_GET['action'] == 'update'){
     $pictureUrlDb = $_POST['current_picture'];
   }
@@ -38,12 +53,12 @@ if(isset($_POST['submit']) && $_SERVER['REQUEST_METHOD'] === 'POST'){
       // On définit l'url de l'image qui sera stockée en BDD
       // http://localhost/PHP/Boutique/Shop/assets/images-produits/RB152-p4.png
       $pictureUrlDb = URL . "assets/images-produits/$pictureName";
-      // echo $pictureUrlDb . '<br>';
+      echo $pictureUrlDb . '<br>';
   
       // On définit le chemin physique sur les serveur où sera copiée l'image
       // C:/xampp/htdocs/PHP/Boutique/Shop/assets/images-produits/RB152-p4.png 
       $pictureFolder = RACINE_SITE . "assets/images-produits/$pictureName";
-      // echo $pictureFolder;
+      echo $pictureFolder;
   
       /*
        La fonction prédéfinie copy() permet de copier un fichier dans un dossier.
@@ -60,12 +75,13 @@ if(isset($_POST['submit']) && $_SERVER['REQUEST_METHOD'] === 'POST'){
     $data = $dbConnect->prepare("UPDATE product SET reference = :reference, category = :category, title = :title, description = :description, color = :color, size = :size, public = :public, picture = :picture, price = :price, stock = :stock WHERE id_product = :id");
     $data->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
 
-    header('location: gestion_boutique.php');
     $_SESSION['msgValid'] = "Le produit a bien été modifié dans la base de données";
   }else{
     // Requête SQL d'insertion
+    echo 'test';
     $data = $dbConnect->prepare("INSERT INTO product (reference, category, title, description, color, size, public, picture, price, stock) VALUES (:reference, :category, :title, :description, :color, :size, :public, :picture, :price, :stock)");
     
+    $_SESSION['msgValid'] = "Le produit a bien été enregistré dans la base de données";
   }
   
   $data->bindValue(':reference', $_POST['reference'], PDO::PARAM_STR);
@@ -79,8 +95,9 @@ if(isset($_POST['submit']) && $_SERVER['REQUEST_METHOD'] === 'POST'){
   $data->bindValue(':price', $_POST['price']);
   $data->bindValue(':stock', $_POST['stock'], PDO::PARAM_INT);
   $data->execute();
+  $_SESSION['msg'] = true;
   
-  $_SESSION['msgValid'] = "Le produit a bien été enregistré dans la base de données";
+  // header('location: gestion_boutique.php');
 }
 
 $data = $dbConnect->query("SELECT * FROM product");
@@ -101,13 +118,6 @@ if(isset($_GET['action']) && $_GET['action'] == 'update'){
 
   $currentProduct = $dataUpdate->fetch(PDO::FETCH_ASSOC);
   // echo '<pre>'; print_r($currentProduct); echo '</pre>';
-}
-
-if(isset($_GET['action']) && $_GET['action'] == 'delete'){
-  $dataDelete = $dbConnect->prepare("DELETE FROM product WHERE id_product = :id");
-  $dataDelete->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
-  $dataDelete->execute();
-  header('location: gestion_boutique.php');
 }
 
 require_once('include/header.php');
@@ -463,5 +473,7 @@ require_once('include/header.php');
 
 <?php 
 require_once('include/footer.php'); 
-unset($_SESSION['msgValid']);
+if($_SESSION['msg'] === false){
+  unset($_SESSION['msgValid']);
+}
 ?>

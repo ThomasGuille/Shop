@@ -361,7 +361,7 @@ a:focus {
 
 .product_section .box {
     position: relative;
-    margin-top: 25px;
+    /* margin-top: 25px; */
     padding: 35px 35px;
     background-color: #f7f8f9;
     -webkit-transition: all .3s;
@@ -1100,6 +1100,39 @@ form input[type="submit"]:focus {
 
 .background-danger{
   background-color: rgb(255, 43, 15);
+}
+
+.nbArtForm{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.title__nbArt{
+  font-weight: 600;
+}
+
+.selector{
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 1rem;
+  background: #f7444e;
+  color: white;
+  font-weight: 600;
+}
+
+.text__nostock{
+  color: #f7444e;
+}
+
+.picture_product{
+  width: 75px;
+}
+
+.cart__link{
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 /** cpy **/

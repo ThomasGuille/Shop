@@ -1,6 +1,6 @@
 <?php 
 require_once('include/init.php');
-
+// phpinfo();
 if(userConnected()){
   header('location: index.php');
 }
@@ -69,6 +69,8 @@ if(isset($_POST['submit']) && $_SERVER["REQUEST_METHOD"] === 'POST'){
   }
 
   if(!isset($globalError)){
+    echo  'test';
+
     $data = $dbConnect->prepare("INSERT INTO user (password, firstName, lastName, email, city, zipcode, address) VALUES (:password, :firstName, :lastName, :email, :city, :zipcode, :address)");
     $data->bindValue(':password', password_hash($_POST['password'], PASSWORD_DEFAULT), PDO::PARAM_STR); // cryptage du mdp via password_hash()
     $data->bindValue(':firstName', $_POST['firstName'], PDO::PARAM_STR);

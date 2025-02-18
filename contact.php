@@ -1,5 +1,9 @@
 <?php 
-  require_once('include/header.php');
+require_once('include/init.php');
+
+
+
+require_once('include/header.php');
 ?>
 
   <!-- inner page section -->

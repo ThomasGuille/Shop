@@ -26,6 +26,8 @@
   <link href="assets/css-famma/style.css" rel="stylesheet" />
   <!-- responsive style -->
   <link href="assets/css-famma/responsive.css" rel="stylesheet" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -47,35 +49,36 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav">
-              <li class="nav-item active">
+              <li class="nav-item <?php activeNavLink('/index.php'); ?>">
                 <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item <?php activeNavLink('/product.php'); ?>">
                 <a class="nav-link" href="product.php">Boutique</a>
               </li>
 
-              <li class="nav-item">
+              <li class="nav-item <?php activeNavLink('/contact.php'); ?>">
                 <a class="nav-link" href="contact.php">Contact</a>
               </li>
               
               <?php if(!userConnected()): ?>
-                <li class="nav-item">
+                <li class="nav-item <?php activeNavLink('/connexion.php'); ?>">
                   <a class="nav-link" href="connexion.php">Identifiez-vous</a>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item <?php activeNavLink('/inscription.php'); ?>">
                   <a class="nav-link" href="inscription.php">Inscription</a>
                 </li>
               <?php endif; ?>
 
               <?php if(userConnected()): ?>
-                <li class="nav-item">
+                <li class="nav-item <?php activeNavLink('/profil.php'); ?>">
                   <a class="nav-link" href="profil.php">Mon compte</a>
                 </li>
-
+                
                 <li class="nav-item">
                   <a class="nav-link" href="connexion.php?action=logout">Déconnexion</a>
                 </li>
+
               <?php endif; ?>
 
               <?php if(adminConnected()): ?>
@@ -96,8 +99,8 @@
                 </li>
               <?php endif; ?>
 
-              <li class="nav-item">
-                <a class="nav-link" href="#">
+              <li class="nav-item <?php activeNavLink('/cart.php'); ?>">
+                <a class="nav-link cart__link" href="cart.php">
                   <svg
                     version="1.1"
                     id="Capa_1"
@@ -147,13 +150,18 @@
                     <g></g>
                     <g></g>
                   </svg>
+                  <?php if(isset($_SESSION['cart'])): ?>
+
+                  <!-- array_sum() est une fonction prédéfinie qui calcul la somme de toutes les valeurs d'un array -->
+                    <span class="badge bg-success text-white"><?= array_sum($_SESSION['cart']['quantity']); ?></span>
+                  <?php endif; ?>
                 </a>
               </li>
-              <form class="form-inline">
+              <!-- <form class="form-inline">
                 <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
                   <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
-              </form>
+              </form> -->
             </ul>
           </div>
         </nav>

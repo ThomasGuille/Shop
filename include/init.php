@@ -1,6 +1,6 @@
 <?php 
 // -------- Connexion BDD
-$dbConnect = new PDO("mysql:host=localhost;dbname=shop", "root", "", [
+$dbConnect = new PDO("mysql:host=localhost;dbname=shop", "Grototo", "T0n4r1n0r0t0t0!", [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING,
     PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
 ]);
@@ -13,13 +13,13 @@ session_start();
 // -------- CHEMIN
 // echo '<pre>'; print_r($_SERVER); echo '</pre>';
 
-define('RACINE_SITE', $_SERVER['DOCUMENT_ROOT'] . '/PHP/Boutique/Shop/');
+define('RACINE_SITE', $_SERVER['DOCUMENT_ROOT'] . '/');
 // echo '<pre>'; print_r(RACINE_SITE); echo '</pre>';
 // Cette constante retourne le chemin physique du dossier htdocs sur le serveur
 // Lors de l'enregistrement d'image/photo, nous avons besoin du chemin complet du dossier
 // echo RACINE_SITE . 'Boutique/Shop/assets/images/nom_de_image' par exemple, pour le stockage physique des images
 
-define("URL", "http://localhost/PHP/Boutique/Shop/");
+define("URL", "http://localhost:8000/");
 // <img url="URL . assets/images/images.jpg">
 // Cette constante servira à enregistrer l'URL d'une image dans la BDD. Dans la mesure où on ne peut pas enregistrer physiquement une image dans une BDD, on lui définit un chemin d'accès
 
