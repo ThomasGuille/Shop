@@ -186,7 +186,7 @@ require_once('include/header.php');
                     $dataColumn = $data->getColumnMeta($i);
                     if($dataColumn['name'] != 'id_product'):
                 ?>
-                <th><?php echo $dataColumn['name']; ?></th>
+                <th><?php echo ucfirst($dataColumn['name']); ?></th>
                 <?php 
                     endif; 
                   endfor; 

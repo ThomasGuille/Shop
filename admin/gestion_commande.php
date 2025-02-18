@@ -5,6 +5,8 @@ if(!adminConnected()){
   header('location:' . URL . 'index.php');
 }
 
+$dbConnect->query("SELECT * FROM ");
+
 require_once('include/header.php');
 ?>
 

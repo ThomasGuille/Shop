@@ -5,6 +5,30 @@ if(!adminConnected()){
   header('location:' . URL . 'index.php');
 }
 
+$dataAdmin = $dbConnect->query("SELECT * FROM user WHERE roles = 'admin'");
+$dataUser = $dbConnect->query("SELECT * FROM user WHERE roles = 'user'");
+
+$arrayAdmin = $dataAdmin->fetchAll(PDO::FETCH_ASSOC);
+$arrayUser = $dataUser->fetchAll(PDO::FETCH_ASSOC);
+// echo '<pre>'; print_r($arrayAdmin); echo '</pre>';
+// echo '<pre>'; print_r($arrayUser); echo '</pre>';
+
+// if(isset($_GET['action']) && $_GET['action'] == 'update'){
+//   $userUpdate = $dbConnect->prepare("SELECT * FROM user WHERE id_user = :id");
+//   $userUpdate->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
+//   $userUpdate->execute();
+
+//   $currentUser = $userUpdate->fetch(PDO::FETCH_ASSOC);
+//   echo '<pre>'; print_r($user); echo '</pre>';
+// }
+
+if(isset($_GET['action']) && $_GET['action'] == 'delete'){
+  $userDelete = $dbConnect->prepare("DELETE FROM user WHERE id_user = :id");
+  $userDelete->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
+  $userDelete->execute();
+  header('location: gestion_user.php');
+}
+
 require_once('include/header.php');
 ?>
 
@@ -38,10 +62,10 @@ require_once('include/header.php');
   </div>
 </section>
 <section class="section is-main-section">
-  <div class="notification is-primary">
+  <!-- <div class="notification is-primary">
     <button class="delete"></button>
     Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-  </div>
+  </div> -->
   <div class="card has-table">
     <header class="card-header">
       <p class="card-header-title">
@@ -65,62 +89,85 @@ require_once('include/header.php');
                     <span class="check"></span>
                   </label>
                 </th>
-                <th></th>
-                <th>Name</th>
-                <th>Company</th>
-                <th>City</th>
-                <th>Progress</th>
-                <th>Created</th>
-                <th></th>
+                
+                <?php 
+                  for($i = 0; $i < $dataUser->columnCount(); $i++): 
+                    $dataColumn = $dataUser->getColumnMeta($i);
+                    if($dataColumn['name'] != 'id_user' && $dataColumn['name'] != 'password' && $dataColumn['name'] != 'roles'):
+                ?>
+                <th><?php echo ucfirst($dataColumn['name']); ?></th>
+                <?php 
+                    endif; 
+                  endfor; 
+                ?>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="is-checkbox-cell">
-                  <label class="b-checkbox checkbox">
-                    <input type="checkbox" value="false" />
-                    <span class="check"></span>
-                  </label>
-                </td>
-                <td class="is-image-cell">
-                  <div class="image">
-                    <img
-                      src="https://avatars.dicebear.com/v2/initials/rebecca-bauch.svg"
-                      class="is-rounded" />
+              <?php foreach($arrayUser as $user): ?>
+                <tr>
+                  <td class="is-checkbox-cell">
+                    <label class="b-checkbox checkbox">
+                      <input type="checkbox" value="false" />
+                      <span class="check"></span>
+                    </label>
+                  </td>
+                  
+                  <?php foreach($user as $key => $value) : if($key != 'id_user' && $key != 'password' && $key != 'roles') : ?>
+                    <td><?= $value; ?></td>
+                  <?php endif; endforeach; ?>
+                  <td>
+                    <div class="field is-horizontal">
+                      <div class="field-label">
+                        <label class="label">User</label>
+                      </div>
+                      <div class="field-body">
+                        <div class="field">
+                          <label class="switch is-rounded"><input type="checkbox" value="false" />
+                            <span class="check"></span>
+                          </label>
+                        </div>
+                      </div>
+                      <span class="control-label">Admin</span>
+                    </div>
+                  </td>
+                  <td class="is-actions-cell">
+                    <div class="buttons is-right">
+                      <!-- <a
+                        class="button is-small is-primary"
+                        href="?action=update&id=<?= $user['id_user']; ?>">
+                        <span class="icon"><i class="mdi mdi-pencil"></i></span>
+                      </a> -->
+                      <a
+                        class="button is-small is-danger jb-modal"
+                        data-target="sample-modal-<?= $user['id_user']; ?>"
+                        type="button">
+                        <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+                <div id="sample-modal-<?= $user['id_user']; ?>" class="modal">
+                  <div class="modal-background jb-modal-close"></div>
+                  <div class="modal-card">
+                    <div class="modal-card-head">
+                      <p class="modal-card-title">Confirmez la suppression</p>
+                      <button class="delete jb-modal-close" aria-label="close"></button>
+                    </div>
+                    <section class="modal-card-body">
+                      <p>Voulez vous vraiment supprimer cet utilisateur ?</p>
+                    </section>
+                    <div class="modal-card-foot">
+                      <button class="button jb-modal-close">Annuler</button>
+                      <a href="?action=delete&id=<?= $user['id_user']; ?>" class="button is-danger jb-modal-close">Supprimer</a>
+                    </div>
                   </div>
-                </td>
-                <td data-label="Name">Rebecca Bauch</td>
-                <td data-label="Company">Daugherty-Daniel</td>
-                <td data-label="City">South Cory</td>
-                <td data-label="Progress" class="is-progress-cell">
-                  <progress
-                    max="100"
-                    class="progress is-small is-primary"
-                    value="79">
-                    79
-                  </progress>
-                </td>
-                <td data-label="Created">
-                  <small
-                    class="has-text-grey is-abbr-like"
-                    title="Oct 25, 2020">Oct 25, 2020</small>
-                </td>
-                <td class="is-actions-cell">
-                  <div class="buttons is-right">
                     <button
-                      class="button is-small is-primary"
-                      type="button">
-                      <span class="icon"><i class="mdi mdi-eye"></i></span>
-                    </button>
-                    <button
-                      class="button is-small is-danger jb-modal"
-                      data-target="sample-modal"
-                      type="button">
-                      <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
+                      class="modal-close is-large jb-modal-close"
+                      aria-label="close"></button>
                   </div>
-                </td>
-              </tr>
+                </div>
+              <?php endforeach; ?>
             </tbody>
           </table>
         </div>
@@ -150,6 +197,10 @@ require_once('include/header.php');
 </section>
 
 <section class="section is-main-section">
+  <!-- <div class="notification is-primary">
+    <button class="delete"></button>
+    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+  </div> -->
   <div class="card has-table">
     <header class="card-header">
       <p class="card-header-title">
@@ -173,62 +224,87 @@ require_once('include/header.php');
                     <span class="check"></span>
                   </label>
                 </th>
-                <th></th>
-                <th>Name</th>
-                <th>Company</th>
-                <th>City</th>
-                <th>Progress</th>
-                <th>Created</th>
+                
+                <?php 
+                  for($i = 0; $i < $dataAdmin->columnCount(); $i++): 
+                    $dataColumn = $dataAdmin->getColumnMeta($i);
+                    if($dataColumn['name'] != 'id_user' && $dataColumn['name'] != 'password' && $dataColumn['name'] != 'roles'):
+                ?>
+                <th><?php echo ucfirst($dataColumn['name']); ?></th>
+                <?php 
+                    endif; 
+                  endfor; 
+                ?>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="is-checkbox-cell">
-                  <label class="b-checkbox checkbox">
-                    <input type="checkbox" value="false" />
-                    <span class="check"></span>
-                  </label>
-                </td>
-                <td class="is-image-cell">
-                  <div class="image">
-                    <img
-                      src="https://avatars.dicebear.com/v2/initials/rebecca-bauch.svg"
-                      class="is-rounded" />
+              <?php foreach($arrayAdmin as $admin): ?>
+                <tr>
+                  <td class="is-checkbox-cell">
+                    <label class="b-checkbox checkbox">
+                      <input type="checkbox" value="false" />
+                      <span class="check"></span>
+                    </label>
+                  </td>
+                  
+                  <?php foreach($admin as $key => $value) : if($key != 'id_user' && $key != 'password' && $key != 'roles') : ?>
+                    <td><?= $value; ?></td>
+                  <?php endif; endforeach; ?>
+
+                  <td>
+                    <div class="field is-horizontal">
+                      <div class="field-label">
+                        <label class="label">User</label>
+                      </div>
+                      <div class="field-body">
+                        <div class="field">
+                          <label class="switch is-rounded"><input type="checkbox" value="true" checked />
+                            <span class="check"></span>
+                          </label>
+                        </div>
+                      </div>
+                      <span class="control-label">Admin</span>
+                    </div>
+                  </td>
+
+                  <td class="is-actions-cell">
+                    <div class="buttons is-right">
+                      <!-- <a
+                        class="button is-small is-primary"
+                        href="?action=update&id=<?= $admin['id_user']; ?>">
+                        <span class="icon"><i class="mdi mdi-pencil"></i></span>
+                      </a> -->
+                      <a
+                        class="button is-small is-danger jb-modal"
+                        data-target="sample-modal-<?= $admin['id_user']; ?>"
+                        type="button">
+                        <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+                <div id="sample-modal-<?= $admin['id_user']; ?>" class="modal">
+                  <div class="modal-background jb-modal-close"></div>
+                  <div class="modal-card">
+                    <div class="modal-card-head">
+                      <p class="modal-card-title">Confirmez la suppression</p>
+                      <button class="delete jb-modal-close" aria-label="close"></button>
+                    </div>
+                    <section class="modal-card-body">
+                      <p>Voulez vous vraiment supprimer cet administateur ?</p>
+                    </section>
+                    <div class="modal-card-foot">
+                      <button class="button jb-modal-close">Annuler</button>
+                      <a href="?action=delete&id=<?= $admin['id_user']; ?>" class="button is-danger jb-modal-close">Supprimer</a>
+                    </div>
                   </div>
-                </td>
-                <td data-label="Name">Rebecca Bauch</td>
-                <td data-label="Company">Daugherty-Daniel</td>
-                <td data-label="City">South Cory</td>
-                <td data-label="Progress" class="is-progress-cell">
-                  <progress
-                    max="100"
-                    class="progress is-small is-primary"
-                    value="79">
-                    79
-                  </progress>
-                </td>
-                <td data-label="Created">
-                  <small
-                    class="has-text-grey is-abbr-like"
-                    title="Oct 25, 2020">Oct 25, 2020</small>
-                </td>
-                <td class="is-actions-cell">
-                  <div class="buttons is-right">
                     <button
-                      class="button is-small is-primary"
-                      type="button">
-                      <span class="icon"><i class="mdi mdi-eye"></i></span>
-                    </button>
-                    <button
-                      class="button is-small is-danger jb-modal"
-                      data-target="sample-modal"
-                      type="button">
-                      <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
+                      class="modal-close is-large jb-modal-close"
+                      aria-label="close"></button>
                   </div>
-                </td>
-              </tr>
+                </div>
+              <?php endforeach; ?>
             </tbody>
           </table>
         </div>
@@ -257,149 +333,5 @@ require_once('include/header.php');
   </div>
 </section>
 
-<section class="section is-main-section">
-  <div class="card">
-    <header class="card-header">
-      <p class="card-header-title">
-        <span class="icon"><i class="mdi mdi-ballot"></i></span>
-        Modification utilisateur
-      </p>
-    </header>
-    <div class="card-content">
-      <form method="get">
-        <div class="field is-horizontal">
-          <div class="field-label is-normal">
-            <label class="label">From</label>
-          </div>
-          <div class="field-body">
-            <div class="field">
-              <p class="control is-expanded has-icons-left">
-                <input class="input" type="text" placeholder="Name" />
-                <span class="icon is-small is-left"><i class="mdi mdi-account"></i></span>
-              </p>
-            </div>
-            <div class="field">
-              <p
-                class="control is-expanded has-icons-left has-icons-right">
-                <input
-                  class="input is-success"
-                  type="email"
-                  placeholder="Email"
-                  value="alex@smith.com" />
-                <span class="icon is-small is-left"><i class="mdi mdi-mail"></i></span>
-                <span class="icon is-small is-right"><i class="mdi mdi-check"></i></span>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="field is-horizontal">
-          <div class="field-label"></div>
-          <div class="field-body">
-            <div class="field is-expanded">
-              <div class="field has-addons">
-                <p class="control">
-                  <a class="button is-static">+33</a>
-                </p>
-                <p class="control is-expanded">
-                  <input
-                    class="input"
-                    type="tel"
-                    placeholder="Your phone number" />
-                </p>
-              </div>
-              <p class="help">Do not enter the first zero</p>
-            </div>
-          </div>
-        </div>
-        <div class="field is-horizontal">
-          <div class="field-label is-normal">
-            <label class="label">Department</label>
-          </div>
-          <div class="field-body">
-            <div class="field is-narrow">
-              <div class="control">
-                <div class="select is-fullwidth">
-                  <select>
-                    <option>Business development</option>
-                    <option>Marketing</option>
-                    <option>Sales</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="field is-horizontal">
-          <div class="field-label is-normal">
-            <label class="label">Subject</label>
-          </div>
-          <div class="field-body">
-            <div class="field">
-              <div class="control">
-                <input
-                  class="input is-danger"
-                  type="text"
-                  placeholder="e.g. Partnership opportunity" />
-              </div>
-              <p class="help is-danger">This field is required</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="field is-horizontal">
-          <div class="field-label is-normal">
-            <label class="label">Question</label>
-          </div>
-          <div class="field-body">
-            <div class="field">
-              <div class="control">
-                <textarea
-                  class="textarea"
-                  placeholder="Explain how we can help you"></textarea>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="field is-horizontal">
-          <div class="field-label">
-            <label class="label">Switch</label>
-          </div>
-          <div class="field-body">
-            <div class="field">
-              <label class="switch is-rounded"><input type="checkbox" value="false" />
-                <span class="check"></span>
-                <span class="control-label">Default</span>
-              </label>
-            </div>
-          </div>
-        </div>
-        <hr />
-        <div class="field is-horizontal">
-          <div class="field-label">
-            <!-- Left empty for spacing -->
-          </div>
-          <div class="field-body">
-            <div class="field">
-              <div class="field is-grouped">
-                <div class="control">
-                  <button type="submit" class="button is-primary">
-                    <span>Submit</span>
-                  </button>
-                </div>
-                <div class="control">
-                  <button
-                    type="button"
-                    class="button is-primary is-outlined">
-                    <span>Reset</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-</section>
 
 <?php require_once('include/footer.php'); ?>
