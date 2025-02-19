@@ -5,6 +5,8 @@ if(!adminConnected()){
   header('location:' . URL . 'index.php');
 }
 
+$_SESSION['msg'] = false;
+
 $dataAdmin = $dbConnect->query("SELECT * FROM user WHERE roles = 'admin'");
 $dataUser = $dbConnect->query("SELECT * FROM user WHERE roles = 'user'");
 
@@ -15,6 +17,17 @@ if(isset($_GET['action']) && $_GET['action'] == 'delete'){
   $userDelete = $dbConnect->prepare("DELETE FROM user WHERE id_user = :id");
   $userDelete->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
   $userDelete->execute();
+  header('location: gestion_user.php');
+}
+
+if(isset($_POST['submit'])){
+  // echo '<pre>'; print_r($_POST); echo '</pre>';
+  $dataUpdate = $dbConnect->prepare("UPDATE user SET roles = :roles WHERE id_user = :id_user");
+  $dataUpdate->bindValue(':roles', $_POST['roles'], PDO::PARAM_STR);
+  $dataUpdate->bindValue(':id_user', $_POST['id_user'], PDO::PARAM_INT);
+  $dataUpdate->execute();
+  $_SESSION['msgValid'] = "Le rôle de l'utilisateur a été changé";
+  $_SESSION['msg'] = true;
   header('location: gestion_user.php');
 }
 
@@ -51,10 +64,12 @@ require_once('include/header.php');
   </div>
 </section>
 <section class="section is-main-section">
-  <!-- <div class="notification is-primary">
-    <button class="delete"></button>
-    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-  </div> -->
+  <?php if(isset($_SESSION['msgValid'])): ?>
+    <div class="notification is-primary">
+      <button class="delete"></button>
+      <?= $_SESSION['msgValid']; ?>
+    </div>
+  <?php endif; ?>
   <div class="card has-table">
     <header class="card-header">
       <p class="card-header-title">
@@ -106,19 +121,14 @@ require_once('include/header.php');
                     <td><?= $value; ?></td>
                   <?php endif; endforeach; ?>
                   <td>
-                    <div class="field is-horizontal">
-                      <div class="field-label">
-                        <label class="label">User</label>
-                      </div>
-                      <div class="field-body">
-                        <div class="field">
-                          <label class="switch is-rounded"><input type="checkbox" value="false" />
-                            <span class="check"></span>
-                          </label>
-                        </div>
-                      </div>
-                      <span class="control-label">Admin</span>
-                    </div>
+                    <form action="" method="post">
+                      <input type="hidden" name="id_user" value="<?= $user['id_user']; ?>">
+                      <select name="roles" id="">
+                        <option <?php if($value == 'user') echo 'selected'; ?> value="user">Client</option>
+                        <option <?php if($value == 'admin') echo 'selected'; ?> value="admin">Administrateur</option>
+                      </select>
+                      <button class="" type="submit" name="submit">OK</button>
+                    </form>
                   </td>
                   <td class="is-actions-cell">
                     <div class="buttons is-right">
@@ -237,28 +247,18 @@ require_once('include/header.php');
                   <?php endif; endforeach; ?>
 
                   <td>
-                    <div class="field is-horizontal">
-                      <div class="field-label">
-                        <label class="label">User</label>
-                      </div>
-                      <div class="field-body">
-                        <div class="field">
-                          <label class="switch is-rounded"><input type="checkbox" value="true" checked />
-                            <span class="check"></span>
-                          </label>
-                        </div>
-                      </div>
-                      <span class="control-label">Admin</span>
-                    </div>
+                  <form action="" method="post">
+                      <input type="hidden" name="id_user" value="<?= $admin['id_user']; ?>">
+                      <select name="roles" id="">
+                        <option <?php if($value == 'user') echo 'selected'; ?> value="user">Client</option>
+                        <option <?php if($value == 'admin') echo 'selected'; ?> value="admin">Administrateur</option>
+                      </select>
+                      <button class="" type="submit" name="submit">OK</button>
+                    </form>
                   </td>
 
                   <td class="is-actions-cell">
                     <div class="buttons is-right">
-                      <!-- <a
-                        class="button is-small is-primary"
-                        href="?action=update&id=<?= $admin['id_user']; ?>">
-                        <span class="icon"><i class="mdi mdi-pencil"></i></span>
-                      </a> -->
                       <a
                         class="button is-small is-danger jb-modal"
                         data-target="sample-modal-<?= $admin['id_user']; ?>"
@@ -318,4 +318,7 @@ require_once('include/header.php');
 </section>
 
 
-<?php require_once('include/footer.php'); ?>
+<?php 
+require_once('include/footer.php'); 
+if($_SESSION['msg'] == false) unset($_SESSION['msgValid']);
+?>

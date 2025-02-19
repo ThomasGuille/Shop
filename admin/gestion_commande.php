@@ -21,7 +21,7 @@ $orderDetails = $data->fetchAll(PDO::FETCH_ASSOC);
 $nbOrder = $dbConnect->query("SELECT * FROM `order`")->rowCount();
 
 if(isset($_POST['submit'])){
-  echo '<pre>'; print_r($_POST); echo '</pre>';
+  // echo '<pre>'; print_r($_POST); echo '</pre>';
   $stateUpdate = $dbConnect->prepare("UPDATE `order` SET state = :state WHERE id_order = :id_order");
   $stateUpdate->bindValue(':state', $_POST['state'], PDO::PARAM_STR);
   $stateUpdate->bindValue(':id_order', $_POST['id_order'], PDO::PARAM_INT);
