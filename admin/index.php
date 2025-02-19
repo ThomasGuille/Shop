@@ -5,6 +5,9 @@ if(!adminConnected()){
   header('location:' . URL . 'index.php');
 }
 
+$dataClients = $dbConnect->query("SELECT * FROM user WHERE roles = 'user'");
+$nbClients = $dataClients->rowCount();
+
 require_once('include/header.php');
 ?>
 
@@ -44,7 +47,7 @@ require_once('include/header.php');
             <div class="level-item">
               <div class="is-widget-label">
                 <h3 class="subtitle is-spaced">Clients</h3>
-                <h1 class="title">512</h1>
+                <h1 class="title"><?= $nbClients; ?></h1>
               </div>
             </div>
             <div class="level-item has-widget-icon">

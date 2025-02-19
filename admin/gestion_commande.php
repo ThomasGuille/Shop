@@ -5,6 +5,8 @@ if(!adminConnected()){
   header('location:' . URL . 'index.php');
 }
 
+$_SESSION['msg'] = false;
+
 $dataOrder = $dbConnect->query("SELECT order.id_order, user.firstName, user.lastName, user.email, user.address, user.zipcode,  user.city, order.date, order.rising, order.state FROM `order` JOIN user ON order.user_id = user.id_user");
 $orders = $dataOrder->fetchAll(PDO::FETCH_ASSOC);
 // echo '<pre>'; print_r($orders); echo '</pre>';
@@ -17,6 +19,17 @@ $orderDetails = $data->fetchAll(PDO::FETCH_ASSOC);
 // echo '<pre>'; print_r($orderDetails); echo '</pre>';
 
 $nbOrder = $dbConnect->query("SELECT * FROM `order`")->rowCount();
+
+if(isset($_POST['submit'])){
+  echo '<pre>'; print_r($_POST); echo '</pre>';
+  $stateUpdate = $dbConnect->prepare("UPDATE `order` SET state = :state WHERE id_order = :id_order");
+  $stateUpdate->bindValue(':state', $_POST['state'], PDO::PARAM_STR);
+  $stateUpdate->bindValue(':id_order', $_POST['id_order'], PDO::PARAM_INT);
+  $stateUpdate->execute();
+  $_SESSION['msgValid'] = "L'état de la commande a bien été changé";
+  $_SESSION['msg'] = true;
+  header('location: gestion_commande.php');
+}
 
 require_once('include/header.php');
 ?>
@@ -51,10 +64,12 @@ require_once('include/header.php');
   </div>
 </section>
 <section class="section is-main-section">
-  <!-- <div class="notification is-primary">
-    <button class="delete"></button>
-    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-  </div> -->
+  <?php if(isset($_SESSION['msgValid'])): ?>
+    <div class="notification is-primary">
+      <button class="delete"></button>
+      <?= $_SESSION['msgValid']; ?>
+    </div>
+  <?php endif; ?>
   <div class="card has-table">
     <header class="card-header">
       <p class="card-header-title">
@@ -105,6 +120,18 @@ require_once('include/header.php');
                   <?php foreach($orderLine as $key => $value): ?>
                     <?php if($key == 'rising'): ?>
                       <td><?= $value ?>€</td>
+                    <?php elseif($key == 'state'): ?>
+                      <td>
+                        <form action="" method="post">
+                          <input type="hidden" name="id_order" value="<?= $orderLine['id_order']; ?>">
+                          <select name="state" id="">
+                            <option <?php if($value == 'treatment') echo 'selected'; ?> value="treatment">En cours de traitement</option>
+                            <option <?php if($value == 'sent') echo 'selected'; ?> value="sent">Envoyée</option>
+                            <option <?php if($value == 'delivered') echo 'selected'; ?> value="delivered">Livrée</option>
+                          </select>
+                          <button class="" type="submit" name="submit">OK</button>
+                        </form>
+                      </td>
                     <?php else: ?>
                       <td><?= $value; ?></td>
                   <?php endif; endforeach; ?>
@@ -190,4 +217,7 @@ require_once('include/header.php');
 </section>
 
 
-<?php require_once('include/footer.php'); ?>
+<?php 
+require_once('include/footer.php'); 
+if($_SESSION['msg'] == false) unset($_SESSION['msgValid']); 
+?>
