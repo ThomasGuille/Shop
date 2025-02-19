@@ -103,8 +103,11 @@ require_once('include/header.php');
                     </label>
                   </td>
                   <?php foreach($orderLine as $key => $value): ?>
-                    <td><?= $value ?></td>
-                  <?php endforeach; ?>
+                    <?php if($key == 'rising'): ?>
+                      <td><?= $value ?>€</td>
+                    <?php else: ?>
+                      <td><?= $value; ?></td>
+                  <?php endif; endforeach; ?>
                   <td class="is-actions-cell">
                     <div class="buttons is-right">
                       <a
@@ -117,9 +120,47 @@ require_once('include/header.php');
                         data-target="sample-modal-<?= $arrayProduct['id_product']; ?>"
                         type="button">
                         <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                        </a>
+                      </a>
                     </div>
                   </td>
+                  <?php if (isset($_GET['action']) && $_GET['action'] == 'details' && $orderLine['id_order'] == $_GET['id']): ?>
+                    <section class="section is-main-section">
+                      <div class="card has-table">
+                        <div class="card-content">
+                          <div class="b-table has-pagination">
+                            <div class="table-wrapper has-mobile-cards">
+                                  <tr>
+                                    <td></td>
+                                    <th>Détails de la commande numéro <?= $_GET['id']; ?></th>
+                                    <td></td>
+                                    <th>Image</th>
+                                    <th>Référence</th>
+                                    <th>Titre</th>
+                                    <th>Quantité</th>
+                                    <th>Prix unitaire</th>
+                                  </tr>
+                                  <?php foreach($orderDetails as $keyDetails => $details): if($orderDetails[$keyDetails]['id_order'] == $_GET['id']): ?>
+                                    <tr>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <?php foreach($details as $detailsKey => $detailsValue): if($detailsKey != 'id_order'): ?>
+                                        <?php if($detailsKey == 'picture'): ?>
+                                          <td><img src="<?= $detailsValue ?>" alt="" class="picture__product"></td>
+                                        <?php elseif($detailsKey == 'price'): ?>
+                                          <td><?= $detailsValue; ?>€</td>
+                                        <?php else: ?>
+                                          <td><?= $detailsValue ?></td>
+                                        <?php endif; ?>
+                                      <?php endif; endforeach; ?>
+                                    </tr>
+                                  <?php endif; endforeach; ?>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                  <?php endif; ?>
                 </tr>
               <?php endforeach; ?>
             </tbody>
@@ -150,74 +191,7 @@ require_once('include/header.php');
   </div>
 </section>
 
-<?php if (isset($_GET['action']) && $_GET['action'] == 'details'): ?>
-  <section class="section is-main-section">
-    <div class="card has-table">
-      <header class="card-header">
-        <p class="card-header-title">
-          <span class="icon"><span class="mdi mdi-cart-arrow-down"></span>
-          </span>
-          Détails commande numéro <?= $_GET['id']; ?>
-        </p>
-        <a href="#" class="card-header-icon">
-          <span class="icon"><i class="mdi mdi-reload"></i></span>
-        </a>
-      </header>
-      <div class="card-content">
-        <div class="b-table has-pagination">
-          <div class="table-wrapper has-mobile-cards">
-            <table
-              class="table is-fullwidth is-striped is-hoverable is-fullwidth">
-              <thead>
-                <tr>
-                  <th>Image</th>
-                  <th>Référence</th>
-                  <th>Titre</th>
-                  <th>Quantité</th>
-                  <th>Prix unitaire</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php foreach($orderDetails as $keyDetails => $details): if($orderDetails[$keyDetails]['id_order'] == $_GET['id']): ?>
-                    <tr>
-                      <?php foreach($details as $detailsKey => $detailsValue): if($detailsKey != 'id_order'): ?>
-                        <?php if($detailsKey == 'picture'): ?>
-                          <td><img src="<?= $detailsValue ?>" alt="" class="picture__product"></td>
-                        <?php else: ?>
-                          <td><?= $detailsValue; ?></td>
-                        <?php endif; ?>
-                      <?php endif; endforeach; ?>
-                    </tr>
-                    <?php endif; endforeach; ?>
-                
-              </tbody>
-            </table>
-          </div>
-          <!-- <div class="notification">
-            <div class="level">
-              <div class="level-left">
-                <div class="level-item">
-                  <div class="buttons has-addons">
-                    <button type="button" class="button is-active">
-                      1
-                    </button>
-                    <button type="button" class="button">2</button>
-                    <button type="button" class="button">3</button>
-                  </div>
-                </div>
-              </div>
-              <div class="level-right">
-                <div class="level-item">
-                  <small>Page 1 of 3</small>
-                </div>
-              </div>
-            </div>
-          </div> -->
-        </div>
-      </div>
-    </div>
-  </section>
-<?php endif; ?>
+
 
 <!-- <section class="section is-main-section">
   <div class="card">
