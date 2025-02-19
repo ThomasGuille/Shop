@@ -7,14 +7,14 @@ if(!adminConnected()){
 
 $dataOrder = $dbConnect->query("SELECT order.id_order, user.firstName, user.lastName, user.email, user.address, user.zipcode,  user.city, order.date, order.rising, order.state FROM `order` JOIN user ON order.user_id = user.id_user");
 $orders = $dataOrder->fetchAll(PDO::FETCH_ASSOC);
-echo '<pre>'; print_r($orders); echo '</pre>';
+// echo '<pre>'; print_r($orders); echo '</pre>';
 
-$data = $dbConnect->query("SELECT order.id_order, order_details.quantity, product.reference, product.title, product.picture, product.price 
+$data = $dbConnect->query("SELECT order.id_order, product.picture, product.reference, product.title, order_details.quantity, product.price 
   FROM `order` JOIN order_details ON order_details.order_id = order.id_order
   JOIN product ON order_details.product_id = product.id_product
 ");
 $orderDetails = $data->fetchAll(PDO::FETCH_ASSOC);
-echo '<pre>'; print_r($orderDetails); echo '</pre>';
+// echo '<pre>'; print_r($orderDetails); echo '</pre>';
 
 $nbOrder = $dbConnect->query("SELECT * FROM `order`")->rowCount();
 
@@ -81,6 +81,7 @@ require_once('include/header.php');
                     <span class="check"></span>
                   </label>
                 </th>
+                <th>Numéro</th>
                 <th>Prénom</th>
                 <th>Nom</th>
                 <th>Email</th>
@@ -101,9 +102,9 @@ require_once('include/header.php');
                       <span class="check"></span>
                     </label>
                   </td>
-                  <?php foreach($orderLine as $key => $value): if($key != 'id_order'): ?>
+                  <?php foreach($orderLine as $key => $value): ?>
                     <td><?= $value ?></td>
-                  <?php endif; endforeach; ?>
+                  <?php endforeach; ?>
                   <td class="is-actions-cell">
                     <div class="buttons is-right">
                       <a
@@ -120,14 +121,6 @@ require_once('include/header.php');
                     </div>
                   </td>
                 </tr>
-
-                <?php if(isset($_GET['action']) && $_GET['action'] == 'details'): foreach($orderDetails as $keyDetails => $details): ?>
-                  <tr>
-                    <?php foreach($details as $detailsKey => $detailsValue): if($detailsKey != 'id_order'): ?>
-                      <td><?= $detailsValue; ?></td>
-                    <?php endif; endforeach; ?>
-                  </tr>
-                <?php endforeach; endif; ?>
               <?php endforeach; ?>
             </tbody>
           </table>
@@ -157,41 +150,50 @@ require_once('include/header.php');
   </div>
 </section>
 
-<section class="section is-main-section">
-  <div class="card has-table">
-    <header class="card-header">
-      <p class="card-header-title">
-        <span class="icon"><span class="mdi mdi-cart-arrow-down"></span>
-        </span>
-        Détails commande
-      </p>
-      <a href="#" class="card-header-icon">
-        <span class="icon"><i class="mdi mdi-reload"></i></span>
-      </a>
-    </header>
-    <div class="card-content">
-      <div class="b-table has-pagination">
-        <div class="table-wrapper has-mobile-cards">
-          <table
-            class="table is-fullwidth is-striped is-hoverable is-fullwidth">
-            <thead>
-              <tr>
-                <th class="is-checkbox-cell">
-                  <label class="b-checkbox checkbox">
-                    <input type="checkbox" value="false" />
-                    <span class="check"></span>
-                  </label>
-                </th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              
-            </tbody>
-          </table>
-        </div>
-        <!-- <div class="notification">
+<?php if (isset($_GET['action']) && $_GET['action'] == 'details'): ?>
+  <section class="section is-main-section">
+    <div class="card has-table">
+      <header class="card-header">
+        <p class="card-header-title">
+          <span class="icon"><span class="mdi mdi-cart-arrow-down"></span>
+          </span>
+          Détails commande numéro <?= $_GET['id']; ?>
+        </p>
+        <a href="#" class="card-header-icon">
+          <span class="icon"><i class="mdi mdi-reload"></i></span>
+        </a>
+      </header>
+      <div class="card-content">
+        <div class="b-table has-pagination">
+          <div class="table-wrapper has-mobile-cards">
+            <table
+              class="table is-fullwidth is-striped is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Référence</th>
+                  <th>Titre</th>
+                  <th>Quantité</th>
+                  <th>Prix unitaire</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach($orderDetails as $keyDetails => $details): if($orderDetails[$keyDetails]['id_order'] == $_GET['id']): ?>
+                    <tr>
+                      <?php foreach($details as $detailsKey => $detailsValue): if($detailsKey != 'id_order'): ?>
+                        <?php if($detailsKey == 'picture'): ?>
+                          <td><img src="<?= $detailsValue ?>" alt="" class="picture__product"></td>
+                        <?php else: ?>
+                          <td><?= $detailsValue; ?></td>
+                        <?php endif; ?>
+                      <?php endif; endforeach; ?>
+                    </tr>
+                    <?php endif; endforeach; ?>
+                
+              </tbody>
+            </table>
+          </div>
+          <!-- <div class="notification">
             <div class="level">
               <div class="level-left">
                 <div class="level-item">
@@ -211,10 +213,11 @@ require_once('include/header.php');
               </div>
             </div>
           </div> -->
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+<?php endif; ?>
 
 <!-- <section class="section is-main-section">
   <div class="card">
