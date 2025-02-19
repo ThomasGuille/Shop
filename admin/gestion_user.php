@@ -10,17 +10,6 @@ $dataUser = $dbConnect->query("SELECT * FROM user WHERE roles = 'user'");
 
 $arrayAdmin = $dataAdmin->fetchAll(PDO::FETCH_ASSOC);
 $arrayUser = $dataUser->fetchAll(PDO::FETCH_ASSOC);
-// echo '<pre>'; print_r($arrayAdmin); echo '</pre>';
-// echo '<pre>'; print_r($arrayUser); echo '</pre>';
-
-// if(isset($_GET['action']) && $_GET['action'] == 'update'){
-//   $userUpdate = $dbConnect->prepare("SELECT * FROM user WHERE id_user = :id");
-//   $userUpdate->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
-//   $userUpdate->execute();
-
-//   $currentUser = $userUpdate->fetch(PDO::FETCH_ASSOC);
-//   echo '<pre>'; print_r($user); echo '</pre>';
-// }
 
 if(isset($_GET['action']) && $_GET['action'] == 'delete'){
   $userDelete = $dbConnect->prepare("DELETE FROM user WHERE id_user = :id");

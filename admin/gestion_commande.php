@@ -5,14 +5,18 @@ if(!adminConnected()){
   header('location:' . URL . 'index.php');
 }
 
-$data = $dbConnect->query("SELECT user.firstName, user.lastName, order.rising, order.date, order.state, order_details.quantity, product.reference, product.title, product.picture, product.price 
+$dataOrder = $dbConnect->query("SELECT order.id_order, user.firstName, user.lastName, user.email, user.address, user.zipcode,  user.city, order.date, order.rising, order.state FROM `order` JOIN user ON order.user_id = user.id_user");
+$orders = $dataOrder->fetchAll(PDO::FETCH_ASSOC);
+echo '<pre>'; print_r($orders); echo '</pre>';
+
+$data = $dbConnect->query("SELECT order.id_order, order_details.quantity, product.reference, product.title, product.picture, product.price 
   FROM `order` JOIN order_details ON order_details.order_id = order.id_order
   JOIN product ON order_details.product_id = product.id_product
-  JOIN user ON order.user_id = user.id_user"
-);
+");
+$orderDetails = $data->fetchAll(PDO::FETCH_ASSOC);
+echo '<pre>'; print_r($orderDetails); echo '</pre>';
 
-$dataCommande = $data->fetchAll(PDO::FETCH_ASSOC);
-  echo '<pre>'; print_r($dataCommande); echo '</pre>';
+$nbOrder = $dbConnect->query("SELECT * FROM `order`")->rowCount();
 
 require_once('include/header.php');
 ?>
@@ -47,20 +51,22 @@ require_once('include/header.php');
   </div>
 </section>
 <section class="section is-main-section">
-  <div class="notification is-primary">
+  <!-- <div class="notification is-primary">
     <button class="delete"></button>
     Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-  </div>
+  </div> -->
   <div class="card has-table">
     <header class="card-header">
       <p class="card-header-title">
         <span class="icon"><span class="mdi mdi-cart-outline"></span>
         </span>
-        10 commandes
+        <?php if($nbOrder <= 1): ?>
+          <?= $nbOrder; ?> commande
+        <?php else : ?>
+          <?= $nbOrder; ?> commandes
+        <?php endif; ?>
       </p>
-      <a href="#" class="card-header-icon">
-        <span class="icon"><i class="mdi mdi-reload"></i></span>
-      </a>
+    
     </header>
     <div class="card-content">
       <div class="b-table has-pagination">
@@ -75,12 +81,52 @@ require_once('include/header.php');
                     <span class="check"></span>
                   </label>
                 </th>
-                <th></th>
-                <th></th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Adresse</th>
+                <th>Code postal</th>
+                <th>Ville</th>
+                <th>Date de la commande</th>
+                <th>Montant total</th>
+                <th>Etat</th>
               </tr>
             </thead>
             <tbody>
-              
+              <?php foreach($orders as $key => $orderLine): ?>
+                <tr>
+                  <td>
+                    <label class="b-checkbox checkbox">
+                      <input type="checkbox" value="false" />
+                      <span class="check"></span>
+                    </label>
+                  </td>
+                  <?php foreach($orderLine as $key => $value): if($key != 'id_order'): ?>
+                    <td><?= $value ?></td>
+                  <?php endif; endforeach; ?>
+                  <td class="is-actions-cell">
+                    <div class="buttons is-right">
+                      <a
+                        class="button is-small is-primary"
+                        href="?action=details&id=<?= $orderLine['id_order']; ?>">
+                        <span class="icon"><i class="mdi mdi-eye"></i></span>
+                      </a>
+                      <a
+                        class="button is-small is-danger jb-modal"
+                        data-target="sample-modal-<?= $arrayProduct['id_product']; ?>"
+                        type="button">
+                        <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+                        </a>
+                    </div>
+                  </td>
+                </tr>
+
+                <?php if(isset($_GET['action']) && $_GET['action'] == 'details'): foreach($orderDetails as $keyDetails => $details): ?>
+                  <tr>
+                    
+                  </tr>
+                <?php endforeach; endif; ?>
+              <?php endforeach; ?>
             </tbody>
           </table>
         </div>
@@ -168,7 +214,7 @@ require_once('include/header.php');
   </div>
 </section>
 
-<section class="section is-main-section">
+<!-- <section class="section is-main-section">
   <div class="card">
     <header class="card-header">
       <p class="card-header-title">
@@ -287,7 +333,7 @@ require_once('include/header.php');
         <hr />
         <div class="field is-horizontal">
           <div class="field-label">
-            <!-- Left empty for spacing -->
+            Left empty for spacing
           </div>
           <div class="field-body">
             <div class="field">
@@ -311,6 +357,6 @@ require_once('include/header.php');
       </form>
     </div>
   </div>
-</section>
+</section> -->
 
 <?php require_once('include/footer.php'); ?>
