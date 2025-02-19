@@ -85,3 +85,14 @@ function activeNavLink($url){
     }
 }
 
+function activeBackLink($url){
+    if($_SERVER['PHP_SELF'] == $url){
+        echo 'is-active';
+    }
+}
+
+function activeBackIcon($url){
+    if($_SERVER['PHP_SELF'] == $url){
+        echo 'has-update-mark';
+    }
+}

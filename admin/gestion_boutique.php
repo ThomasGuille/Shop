@@ -5,7 +5,7 @@ if(!adminConnected()){
   header('location:' . URL . 'index.php');
 }
 
-// echo '<pre>'; print_r($_SESSION); echo '</pre>';
+// echo '<pre>'; print_r($_SERVER['PHP_SELF']); echo '</pre>';
 
 $_SESSION['msg'] = false;
 

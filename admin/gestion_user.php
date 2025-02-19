@@ -122,11 +122,6 @@ require_once('include/header.php');
                   </td>
                   <td class="is-actions-cell">
                     <div class="buttons is-right">
-                      <!-- <a
-                        class="button is-small is-primary"
-                        href="?action=update&id=<?= $user['id_user']; ?>">
-                        <span class="icon"><i class="mdi mdi-pencil"></i></span>
-                      </a> -->
                       <a
                         class="button is-small is-danger jb-modal"
                         data-target="sample-modal-<?= $user['id_user']; ?>"

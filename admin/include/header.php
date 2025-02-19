@@ -78,8 +78,8 @@
         <p class="menu-label">General</p>
         <ul class="menu-list">
           <li>
-            <a href="index.php" class="has-icon">
-              <span class="icon"><i class="mdi mdi-desktop-mac"></i></span>
+            <a href="index.php" class="has-icon <?php activeBackLink('/admin/index.php'); ?>">
+              <span class="icon <?php activeBackIcon('/admin/index.php'); ?>"><i class="mdi mdi-desktop-mac"></i></span>
               <span class="menu-item-label">Dashboard</span>
             </a>
           </li>
@@ -87,21 +87,21 @@
         <p class="menu-label">MENU</p>
         <ul class="menu-list">
           <li>
-            <a href="gestion_boutique.php" class="is-active has-icon">
-              <span class="icon has-update-mark"><span class="mdi mdi-store"></span>
+            <a href="gestion_boutique.php" class="has-icon <?php activeBackLink('/admin/gestion_boutique.php'); ?>">
+              <span class="icon <?php activeBackIcon('/admin/gestion_boutique.php'); ?>"><span class="mdi mdi-store"></span>
               </span>
               <span class="menu-item-label">Boutique</span>
             </a>
           </li>
           <li>
-            <a href="gestion_commande.php" class="has-icon">
-              <span class="icon"><span class="mdi mdi-sheep"></span> </span>
+            <a href="gestion_commande.php" class="has-icon <?php activeBackLink('/admin/gestion_commande.php'); ?>">
+              <span class="icon <?php activeBackIcon('/admin/gestion_commande.php'); ?>"><span class="mdi mdi-sheep"></span> </span>
               <span class="menu-item-label">Commandes</span>
             </a>
           </li>
           <li>
-            <a href="gestion_user.php" class="has-icon">
-              <span class="icon"><i class="mdi mdi-account-circle"></i></span>
+            <a href="gestion_user.php" class="has-icon <?php activeBackLink('/admin/gestion_user.php'); ?>">
+              <span class="icon <?php activeBackIcon('/admin/gestion_user.php'); ?>"><i class="mdi mdi-account-circle"></i></span>
               <span class="menu-item-label">Utilisateurs</span>
             </a>
           </li>
