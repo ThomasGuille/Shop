@@ -123,7 +123,9 @@ require_once('include/header.php');
 
                 <?php if(isset($_GET['action']) && $_GET['action'] == 'details'): foreach($orderDetails as $keyDetails => $details): ?>
                   <tr>
-                    
+                    <?php foreach($details as $detailsKey => $detailsValue): if($detailsKey != 'id_order'): ?>
+                      <td><?= $detailsValue; ?></td>
+                    <?php endif; endforeach; ?>
                   </tr>
                 <?php endforeach; endif; ?>
               <?php endforeach; ?>
