@@ -24,7 +24,7 @@ $topArticle = $dataTop->fetch(PDO::FETCH_ASSOC);
 
 $dataStock = $dbConnect->query("SELECT id_product, reference, title, size, stock FROM product WHERE stock < 10");
 $stockLimit = $dataStock->fetchAll(PDO::FETCH_ASSOC);
-echo '<pre>'; print_r($stockLimit); echo '</pre>';
+// echo '<pre>'; print_r($stockLimit); echo '</pre>';
 
 require_once('include/header.php');
 ?>
@@ -122,7 +122,7 @@ require_once('include/header.php');
   <div class="card has-table has-mobile-sort-spaced">
     <header class="card-header">
       <p class="card-header-title">
-        <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
+        <span class="icon"><i class="mdi mdi-store-alert"></i></span>
         Produits stock insuffisant
       </p>
       <a href="#" class="card-header-icon">
@@ -167,7 +167,7 @@ require_once('include/header.php');
                     <td class="is-actions-cell <?php if($article['stock'] == 0) echo 'has-background-danger'; else echo 'has-background-warning'; ?>">
                       <div class="buttons is-right">
                         <a
-                          href="gestion_boutique.php"
+                          href="gestion_boutique.php?action=update&id=<?= $article['id_product']; ?>"
                           class="button is-small is-primary"
                           type="button">
                           <span class="icon"><i class="mdi mdi-eye"></i></span>
