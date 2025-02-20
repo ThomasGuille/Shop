@@ -18,6 +18,14 @@ foreach($totalArray as $key){
   }
 }
 
+$dataTop = $dbConnect->query("SELECT SUM(quantity) AS nbArticle, product.reference, product.title, product.picture FROM order_details JOIN product WHERE order_details.product_id = product.id_product GROUP BY order_details.product_id ORDER BY nbArticle DESC");
+$topArticle = $dataTop->fetch(PDO::FETCH_ASSOC);
+// echo '<pre>'; print_r($topArticle); echo '</pre>';
+
+$dataStock = $dbConnect->query("SELECT id_product, reference, title, size, stock FROM product WHERE stock < 10");
+$stockLimit = $dataStock->fetchAll(PDO::FETCH_ASSOC);
+echo '<pre>'; print_r($stockLimit); echo '</pre>';
+
 require_once('include/header.php');
 ?>
 
@@ -67,10 +75,9 @@ require_once('include/header.php');
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="tile is-parent">
-      <div class="card tile is-child">
+
+        <hr>
+
         <div class="card-content">
           <div class="level is-mobile">
             <div class="level-item">
@@ -88,19 +95,22 @@ require_once('include/header.php');
         </div>
       </div>
     </div>
+    
     <div class="tile is-parent">
       <div class="card tile is-child">
         <div class="card-content">
           <div class="level is-mobile">
             <div class="level-item">
               <div class="is-widget-label">
-                <h3 class="subtitle is-spaced">Top article</h3>
-                <h1 class="title">256%</h1>
+                <h2 class="subtitle is-spaced">Top article</h2>
+                <h3 class=""><?= $topArticle['nbArticle']; ?> ventes</h3>
+                <h3 class=""><?= $topArticle['reference']; ?></h3>
+                <h3 class=""><?= $topArticle['title']; ?></h3>
               </div>
             </div>
             <div class="level-item has-widget-icon">
               <div class="is-widget-icon">
-                <span class="icon has-text-success is-large"><i class="mdi mdi-finance mdi-48px"></i></span>
+                <img class="dashTop" src="<?= $topArticle['picture']; ?>" alt="<?= $topArticle['title']; ?>">
               </div>
             </div>
           </div>
@@ -127,78 +137,48 @@ require_once('include/header.php');
             <thead>
               <tr>
                 <th></th>
-                <th>Name</th>
-                <th>Company</th>
-                <th>City</th>
-                <th>Progress</th>
-                <th>Created</th>
+                <th>Référence</th>
+                <th>Nom de l'article</th>
+                <th>Taille</th>
+                <th>Stock</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="is-image-cell">
-                  <div class="image">
-                    <img
-                      src="https://avatars.dicebear.com/v2/initials/rebecca-bauch.svg"
-                      class="is-rounded" />
-                  </div>
-                </td>
-                <td data-label="Name">Rebecca Bauch</td>
-                <td data-label="Company">Daugherty-Daniel</td>
-                <td data-label="City">South Cory</td>
-                <td data-label="Progress" class="is-progress-cell">
-                  <progress
-                    max="100"
-                    class="progress is-small is-primary"
-                    value="79">
-                    79
-                  </progress>
-                </td>
-                <td data-label="Created">
-                  <small
-                    class="has-text-grey is-abbr-like"
-                    title="Oct 25, 2020">Oct 25, 2020</small>
-                </td>
-                <td class="is-actions-cell">
-                  <div class="buttons is-right">
-                    <button
-                      class="button is-small is-primary"
-                      type="button">
-                      <span class="icon"><i class="mdi mdi-eye"></i></span>
-                    </button>
-                    <button
-                      class="button is-small is-danger jb-modal"
-                      data-target="sample-modal"
-                      type="button">
-                      <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
+              <?php foreach($stockLimit as $article): ?>
+                <tr>
+                  <!-- <td class="is-image-cell">
+                    <div class="image">
+                      <img
+                        src="https://avatars.dicebear.com/v2/initials/rebecca-bauch.svg"
+                        class="is-rounded" />
+                    </div>
+                  </td> -->
+                  <td></td>
+                  <?php foreach($article as $key => $value): if($key != 'id_product'): ?>
+                  <td class="<?php if($article['stock'] == 0) echo 'has-background-danger'; else echo 'has-background-warning'; ?>" name="<?= $key; ?>"><?= $value; ?></td>
+                    <!-- <progress
+                      max="100"
+                      class="progress is-small is-primary"
+                      value="79">
+                      79
+                    </progress> -->
+                    <?php endif; endforeach; ?>
+                    <td class="is-actions-cell <?php if($article['stock'] == 0) echo 'has-background-danger'; else echo 'has-background-warning'; ?>">
+                      <div class="buttons is-right">
+                        <a
+                          href="gestion_boutique.php"
+                          class="button is-small is-primary"
+                          type="button">
+                          <span class="icon"><i class="mdi mdi-eye"></i></span>
+                        </a>
+                      </div>
+                    </td>
+                </tr>
+              <?php endforeach; ?>
             </tbody>
           </table>
         </div>
-        <!-- <div class="notification">
-            <div class="level">
-              <div class="level-left">
-                <div class="level-item">
-                  <div class="buttons has-addons">
-                    <button type="button" class="button is-active">
-                      1
-                    </button>
-                    <button type="button" class="button">2</button>
-                    <button type="button" class="button">3</button>
-                  </div>
-                </div>
-              </div>
-              <div class="level-right">
-                <div class="level-item">
-                  <small>Page 1 of 3</small>
-                </div>
-              </div>
-            </div>
-          </div> -->
       </div>
     </div>
   </div>
