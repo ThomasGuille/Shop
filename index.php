@@ -3,6 +3,11 @@ require_once('include/init.php');
 
 // echo '<pre>'; print_r($_SESSION); echo '</pre>';
 
+$data = $dbConnect->query("SELECT * FROM product ORDER BY id_product DESC LIMIT 3");
+$dataProduct = $data->fetchAll(PDO::FETCH_ASSOC);
+// echo '<pre>', print_r($dataProduct); echo '</pre>';
+
+
 require_once('include/header.php');
 ?>
 
@@ -382,29 +387,31 @@ require_once('include/header.php');
   <section class="product_section layout_padding">
     <div class="container">
       <div class="heading_container heading_center">
-        <h2>Nos <span>produits</span></h2>
+        <h2>Nos derniers <span>produits</span></h2>
       </div>
       <div class="row">
-        <div class="col-sm-6 col-md-4 col-lg-4">
-          <div class="box">
-            <div class="option_container">
-              <div class="options">
-                <a href="" class="option1"> Chemise homme </a>
-                <a href="" class="option2"> Acheter maintenant </a>
+        <?php foreach($dataProduct as $key => $value): ?>
+          <div class="col-sm-6 col-md-4 col-lg-4">
+            <div class="box">
+              <div class="option_container">
+                <div class="options">
+                  <a href="fiche_produit.php?id=<?= $value['id_product']; ?>" class="option1"> Voir plus</a>
+                  <!-- <a href="" class="option2"> Acheter maintenant </a> -->
+                </div>
+              </div>
+              <div class="img-box">
+                <img src="<?= $value['picture']; ?>" alt="" />
+              </div>
+              <div class="detail-box">
+                <h5><?= $value['title']; ?></h5>
+                <h6><?= $value['price']; ?>€</h6>
               </div>
             </div>
-            <div class="img-box">
-              <img src="assets/images-famma/p1.png" alt="" />
-            </div>
-            <div class="detail-box">
-              <h5>Chemise homme</h5>
-              <h6>75€</h6>
-            </div>
           </div>
-        </div>
+        <?php endforeach; ?>
       </div>
       <div class="btn-box">
-        <a href="">Voir tous les produits</a>
+        <a href="product.php">Voir tous les produits</a>
       </div>
     </div>
   </section>
