@@ -5,7 +5,7 @@ if(!userConnected() || !isset($_GET['id'])){
   header('location: index.php');
 }
 
-$data = $dbConnect->prepare("SELECT * FROM `order` WHERE user_id = :userid ORDER BY date DESC");
+$data = $dbConnect->prepare("SELECT id_order, DATE_FORMAT(date, '%d-%m-%Y') as date, rising, state FROM `order` WHERE user_id = :userid ORDER BY date DESC");
 $data->bindValue(':userid', $_GET['id'], PDO::PARAM_INT);
 $data->execute();
 $dataOrder = $data->fetchAll(PDO::FETCH_ASSOC);
@@ -43,37 +43,49 @@ require_once('include/header.php');
 
 <section>
     <div class="container">
-        <div class="row">
+        <div class="row d-flex flex-column">
             <?php foreach($dataOrder as $keyOrder => $valueOrder): ?>
-                <table>
-                    <tr>
-                        <td>Date de la commande: <?= $valueOrder['date']; ?></td>
-                    </tr>
-                    <tr>
-                        <th>Image</th>
-                        <th>Nom</th>
-                        <th>Prix unitaire</th>
-                        <th>Quantité</th>
-                        <th>Total article</th>
-                    </tr>
-                    <?php foreach($dataOrderDetails as $keyDetails => $valueDetails): if($valueOrder['id_order'] == $valueDetails['id_order']): ?>
+                <div class="order__table">
+                    <p><span class="details__title">Date de la commande: </span><?= $valueOrder['date']; ?></p>
+                    <table class="order__row">
                         <tr>
-                            <?php foreach($valueDetails as $key => $value): if($key != 'id_order' && $key != 'id_product'): ?>
-                                <?php if($key == 'picture'): ?>
-                                    <td><img src="<?= $valueDetails['picture']; ?>" alt="<?= $valueDetails['title']; ?>"></td>
-                                <?php elseif($key == 'price'): ?>
-                                    <td><?= $value; ?>€</td>
-                                <?php else: ?>
-                                    <td><?= $value; ?></td>
-                                <?php endif; ?>
-                            <?php endif; endforeach; ?>
-                            <td><?= $valueDetails['price'] * $valueDetails['quantity']; ?>€</td>
+                            <th class="order__text"></th>
+                            <th class="order__text">Nom de l'article</th>
+                            <th class="order__text">Prix unitaire</th>
+                            <th class="order__text">Quantité</th>
+                            <th class="order__text">Total article</th>
                         </tr>
-                    <?php endif; endforeach; ?>
-                    <tr>
-                        <td>Etat de la commande: <?= $valueOrder['state']; ?></td>
-                    </tr>
-                </table>
+                        <?php foreach($dataOrderDetails as $keyDetails => $valueDetails): if($valueOrder['id_order'] == $valueDetails['id_order']): ?>
+                            <tr class="order__details">
+                                <?php foreach($valueDetails as $key => $value): if($key != 'id_order' && $key != 'id_product'): ?>
+                                    <?php if($key == 'picture'): ?>
+                                        <td class="picture__product__order"><img class="picture_product" src="<?= $valueDetails['picture']; ?>" alt="<?= $valueDetails['title']; ?>"></td>
+                                    <?php elseif($key == 'price'): ?>
+                                        <td class="order__text"><?= $value; ?>€</td>
+                                    <?php else: ?>
+                                        <td class="order__text"><?= $value; ?></td>
+                                    <?php endif; ?>
+                                <?php endif; endforeach; ?>
+                                <td class="order__text"><?= $valueDetails['price'] * $valueDetails['quantity']; ?>€</td>
+                            </tr>
+                        <?php endif; endforeach; ?>
+                    </table>
+                    <hr>
+                    <div class="total__state d-flex justify-content-between">
+                        <p><span class="details__title">Etat de la commande: </span><?php switch($valueOrder['state']){
+                            case 'treatment' :
+                                echo 'en cours de traitement';
+                            break;
+                            case 'sent' :
+                                echo 'envoyée';
+                            break;
+                            case 'delivered' :
+                                echo '<span class="order__delivered">livrée</span>';
+                            break;
+                        } ?></p>
+                        <p><span class="details__title">Montant total de la commande: </span><?= $valueOrder['rising']; ?>€</p>
+                    </div>
+                </div>
             <?php endforeach; ?>
         </div>
     </div>

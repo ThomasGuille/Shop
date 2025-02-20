@@ -1125,8 +1125,35 @@ form input[type="submit"]:focus {
   color: #f7444e;
 }
 
+.order__table{
+  border: 2px solid #f7444e;
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+}
+
+.order__text{
+  text-align: end;
+}
+
+.order__row{
+  width: 100%;
+}
+
+.picture__product__order{
+  width: 200px;
+  text-align: end;
+}
+
 .picture_product{
   width: 75px;
+}
+
+.details__title{
+  font-weight: 600;
+}
+
+.order__delivered{
+  color: green;
 }
 
 .cart__link{
