@@ -1135,6 +1135,10 @@ form input[type="submit"]:focus {
   gap: 0.25rem;
 }
 
+.modif__profil{
+  flex-wrap: unset;
+}
+
 /** cpy **/
 
 .cpy_ {

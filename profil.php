@@ -145,7 +145,7 @@ require_once('include/header.php');
           </div>
         </div>
       <?php else: ?>
-        <div class="row">
+        <div class="row modif__profil">
           <div class="col-lg-8 offset-lg-2">
             <div class="full">
               <card class="card p-3">
@@ -180,8 +180,13 @@ require_once('include/header.php');
               </card>
             </div>
           </div>
-          <div class="btn-box">
-            <a href="?action=update&id=<?= $_SESSION['user']['id_user']; ?>"> Modifiez votre profil </a>
+          <div class="product_section">
+            <div class="btn-box">
+              <a href="?action=update&id=<?= $_SESSION['user']['id_user']; ?>"> Modifier mon profil </a>
+            </div>
+            <div class="btn-box">
+              <a href="mescommandes.php?id=<?= $_SESSION['user']['id_user']; ?>"> Mes commandes </a>
+            </div>
           </div>
         </div>
       <?php endif; ?>
