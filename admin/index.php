@@ -8,6 +8,16 @@ if(!adminConnected()){
 $dataClients = $dbConnect->query("SELECT * FROM user WHERE roles = 'user'");
 $nbClients = $dataClients->rowCount();
 
+$data = $dbConnect->query("SELECT rising FROM `order`");
+$totalArray = $data->fetchALL(PDO::FETCH_ASSOC);
+
+$totalSales = 0;
+foreach($totalArray as $key){
+  foreach($key as $value){
+    $totalSales += $value;
+  }
+}
+
 require_once('include/header.php');
 ?>
 
@@ -65,8 +75,8 @@ require_once('include/header.php');
           <div class="level is-mobile">
             <div class="level-item">
               <div class="is-widget-label">
-                <h3 class="subtitle is-spaced">Sales</h3>
-                <h1 class="title">$7,770</h1>
+                <h3 class="subtitle is-spaced">Total ventes</h3>
+                <h1 class="title"><?= $totalSales ?>€</h1>
               </div>
             </div>
             <div class="level-item has-widget-icon">
@@ -84,7 +94,7 @@ require_once('include/header.php');
           <div class="level is-mobile">
             <div class="level-item">
               <div class="is-widget-label">
-                <h3 class="subtitle is-spaced">Performance</h3>
+                <h3 class="subtitle is-spaced">Top article</h3>
                 <h1 class="title">256%</h1>
               </div>
             </div>
