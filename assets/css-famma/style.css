@@ -1166,6 +1166,10 @@ form input[type="submit"]:focus {
   flex-wrap: unset;
 }
 
+.card{
+  box-shadow: 5px 5px 5px -5px rgba(0,0,0,.2);
+}
+
 /** cpy **/
 
 .cpy_ {
