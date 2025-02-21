@@ -46,7 +46,10 @@ require_once('include/header.php');
         <div class="row d-flex flex-column">
             <?php foreach($dataOrder as $keyOrder => $valueOrder): ?>
                 <div class="order__table">
-                    <p><span class="details__title">Date de la commande: </span><?= $valueOrder['date']; ?></p>
+                    <div class="date__number">
+                        <p class="date__order"><span class="details__title">Date de la commande: </span><?= $valueOrder['date']; ?></p>
+                        <p class="date__order"><span class="details__title">Numéro de commande: </span>FAMMS<?= $valueOrder['id_order']; ?></p>
+                    </div>
                     <table class="order__row">
                         <tr>
                             <th class="order__text"></th>

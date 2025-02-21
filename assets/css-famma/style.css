@@ -1148,6 +1148,20 @@ form input[type="submit"]:focus {
   width: 75px;
 }
 
+.date__number{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #171620;
+  padding: 1rem 2rem;
+  margin-bottom: 1rem;
+}
+
+.date__order{
+  color: white;
+  margin-bottom: 0 !important;
+}
+
 .details__title{
   font-weight: 600;
 }
