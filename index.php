@@ -37,7 +37,7 @@ require_once('include/header.php');
                       impedit sequi.
                     </p>
                     <div class="btn-box">
-                      <a href="" class="btn1"> Achetez maintenant</a>
+                      <a href="product.php" class="btn1"> Achetez maintenant</a>
                     </div>
                   </div>
                 </div>
@@ -62,7 +62,7 @@ require_once('include/header.php');
                       impedit sequi.
                     </p>
                     <div class="btn-box">
-                      <a href="" class="btn1">Achetez maintenant</a>
+                      <a href="product.php" class="btn1">Achetez maintenant</a>
                     </div>
                   </div>
                 </div>
@@ -87,7 +87,7 @@ require_once('include/header.php');
                       impedit sequi.
                     </p>
                     <div class="btn-box">
-                      <a href="" class="btn1">Achetez maintenant</a>
+                      <a href="product.php" class="btn1">Achetez maintenant</a>
                     </div>
                   </div>
                 </div>
@@ -375,7 +375,7 @@ require_once('include/header.php');
               Tenetur commodi, nisi rem vel, ea eaque ab ipsa, autem similique
               ex unde!
             </p>
-            <a href="">Achetez maintenant</a>
+            <a href="product.php">Achetez maintenant</a>
           </div>
         </div>
       </div>

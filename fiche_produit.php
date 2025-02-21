@@ -45,9 +45,9 @@ require_once('include/header.php');
       </div>
       <div class="row mb-3">
         <div class="col-sm-6 col-md-4 col-lg-4">
-          <div class="box ">
-            <div class="img-box">
-              <img src="<?= $dataProduct['picture']; ?>" alt="" />
+          <div class="box box__details">
+            <div class="img-box img__box__details">
+              <img class="img__details" src="<?= $dataProduct['picture']; ?>" alt="<?= $dataProduct['title']; ?>" />
             </div>
           </div>
         </div>
@@ -65,7 +65,7 @@ require_once('include/header.php');
         <?php if($dataProduct['stock'] == 0): ?>
           <p class="text__nostock">Cet article n'est plus disponible</p>
           <?php else : ?>
-          <?php if($dataProduct['stock'] > 0 && $dataProduct['stock'] <= 5) : ?>
+          <?php if($dataProduct['stock'] > 0 && $dataProduct['stock'] < 10) : ?>
             <p class="text__nostock">Attention il ne reste que <?= $dataProduct['stock']; ?> article(s)</p>
           <?php endif; ?>
           <form class="nbArtForm" action="cart.php" method="post">

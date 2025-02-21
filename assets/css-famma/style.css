@@ -381,12 +381,12 @@ a:focus {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  /* height: 300px; */
+  max-height: 215px;
 }
 
 .product_section .box .img-box img {
   max-width: 100%;
-  /* max-height: 280px; */
+  max-height: 160px;
   -webkit-transition: all .3s;
   transition: all .3s;
 }
@@ -1168,6 +1168,19 @@ form input[type="submit"]:focus {
 
 .card{
   box-shadow: 5px 5px 5px -5px rgba(0,0,0,.2);
+}
+
+.box__details{
+  height: 100% !important;
+}
+
+.img__box__details{
+  max-height: 400px !important;
+  align-items: unset !important;
+}
+
+.img__details{
+  max-height: 350px !important;
 }
 
 /** cpy **/
