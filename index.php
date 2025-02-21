@@ -396,7 +396,7 @@ require_once('include/header.php');
               <div class="option_container">
                 <div class="options">
                   <a href="fiche_produit.php?id=<?= $value['id_product']; ?>" class="option1"> Voir plus</a>
-                  <!-- <a href="" class="option2"> Acheter maintenant </a> -->
+                  <a href="cart.php?id=<?= $value['id_product']; ?>" class="option2"> Acheter maintenant </a>
                 </div>
               </div>
               <div class="img-box">

@@ -7,7 +7,7 @@ if(!adminConnected()){
 
 $_SESSION['msg'] = false;
 
-$dataOrder = $dbConnect->query("SELECT order.id_order, user.firstName, user.lastName, user.email, user.address, user.zipcode,  user.city, order.date, order.rising, order.state FROM `order` JOIN user ON order.user_id = user.id_user");
+$dataOrder = $dbConnect->query("SELECT order.id_order, user.firstName, user.lastName, user.email, user.address, user.zipcode,  user.city, order.date, order.rising, order.state FROM `order` JOIN user ON order.user_id = user.id_user ORDER BY order.id_order DESC");
 $orders = $dataOrder->fetchAll(PDO::FETCH_ASSOC);
 // echo '<pre>'; print_r($orders); echo '</pre>';
 

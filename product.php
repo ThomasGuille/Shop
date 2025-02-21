@@ -34,7 +34,7 @@ require_once('include/header.php');
               <div class="option_container">
                 <div class="options">
                   <a href="fiche_produit.php?id=<?= $product['id_product']; ?>" class="option1"> Voir plus </a>
-                  <a href="cart.php" class="option2">Acheter maintenant</a>
+                  <a href="cart.php?id=<?= $product['id_product']; ?>" class="option2">Acheter maintenant</a>
                 </div>
               </div>
               <div class="img-box">

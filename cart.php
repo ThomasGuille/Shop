@@ -4,16 +4,22 @@ require_once('include/init.php');
 // echo '<pre>'; print_r($_SESSION); echo '</pre>';
 // unset($_SESSION['cart']);
 
-if(isset($_POST['addCart'])){
+if(isset($_POST['addCart']) || isset($_GET['id'])){
     $data = $dbConnect->prepare("SELECT * FROM product WHERE id_product = :id");
     $data->bindValue(':id', $_POST['id_product'], PDO::PARAM_INT);
+    $quantity = $_POST['quantity'];
+    if(isset($_GET['id'])){
+        $data->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
+        $quantity = 1;
+    }
     $data->execute();
 
     $product = $data->fetch(PDO::FETCH_ASSOC);
     $data->bindValue(':id', $product['id_product'], PDO::PARAM_INT);
     // echo '<pre>'; print_r($product); echo '</pre>';
+
     
-    addProductCart($product['id_product'], $product['title'], $product['picture'], $product['reference'], $_POST['quantity'], $product['price']);
+    addProductCart($product['id_product'], $product['title'], $product['picture'], $product['reference'], $quantity, $product['price']);
     
     header('location: cart.php');
 }

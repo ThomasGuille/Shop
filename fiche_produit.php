@@ -45,7 +45,7 @@ require_once('include/header.php');
       </div>
       <div class="row mb-3">
         <div class="col-sm-6 col-md-4 col-lg-4">
-          <div class="box">
+          <div class="box ">
             <div class="img-box">
               <img src="<?= $dataProduct['picture']; ?>" alt="" />
             </div>
